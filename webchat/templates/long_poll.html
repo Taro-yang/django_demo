@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>长轮询</title>
+    <style>
+        #message {
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="message"></div>
+    <div>
+        <input type="text" id="txt">
+        <input type="button" id="btn" placeholder="输入内容" value="发送" onclick="send_msg()">
+    </div>
+
+    <script src="/static/jquery.js"></script>
+    <script>
+        uid = {{ uid }}
+        function send_msg() {
+            txt = $('#txt').val()
+            $.ajax({
+                url: 'send',
+                type: 'GET',
+                data: {
+                    msg: txt
+                },
+                success: function () {
+                    console.log('ok')
+                }
+            })
+        }
+        function get_msg() {
+            $.ajax({
+                url: 'get_msg',
+                type: 'GET',
+                data: {
+                    'uid': uid
+                },
+                success: function (res) {
+                    if (res.result) {
+                        tag = $('<div>')
+                        tag.text(res.data)
+                        $('#message').append(tag)
+                    }
+                    get_msg()
+                }
+            })
+        }
+        get_msg()
+    </script>
+
+</body>
+</html>

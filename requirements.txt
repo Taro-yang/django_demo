@@ -1,0 +1,4 @@
+#python3.6
+#依赖包
+django==3.2.11
+channels==3.0.4

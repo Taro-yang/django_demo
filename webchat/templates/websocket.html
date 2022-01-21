@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>websocket</title>
+    <style>
+        #message {
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<div id="message"></div>
+<div>
+    <input type="text" id="txt">
+    <input type="button" id="btn" value="输入内容" onclick="send_msg()">
+</div>
+</body>
+
+    <script src="/static/jquery.js"></script>
+    <script>
+        ws = new WebSocket('ws://' + window.location.host + '/ws/' + {{ uid }})
+
+        function send_msg() {
+            let txt = $('#txt').val()
+            ws.send(txt)
+        }
+
+        ws.onmessage = function (event) {
+            let tag = $('<div>')
+            tag.text(event.data)
+            $('#message').append(tag)
+        }
+    </script>
+</html>

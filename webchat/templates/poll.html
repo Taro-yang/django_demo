@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮询</title>
+    <style>
+        #message {
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<div id="message"></div>
+<div id="send">
+    <input type="text" id="txt" placeholder="输入聊天内容">
+    <input type="button" id="btn" value="发送" onclick="SendMsg()">
+</div>
+
+<script src="/static/jquery.js"></script>
+<script>
+    function SendMsg() {
+        let txt = $('#txt').val()
+        $.ajax({
+            url: 'send',
+            type: 'get',
+            data: {
+                'msg': txt
+            },
+            success: function () {
+                $('#txt').val = ''
+            }
+        })
+    }
+
+    let length = 0
+    setInterval(function () {
+        $.ajax({
+            url: 'get_msg',
+            type: 'get',
+            data: {
+                'length': length
+            },
+            success: function (res) {
+                length = res.max_length
+                data = JSON.parse(res.content)
+                $.each(data, function (index, item) {
+                    tag = $('<div>')
+                    tag.text(item)
+                    $('#message').append(tag)
+                })
+            }
+        })
+    }, 2000)
+
+</script>
+
+</body>
+</html>
